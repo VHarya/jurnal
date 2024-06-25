@@ -1,4 +1,4 @@
-package com.vharya.jurnal;
+package com.vharya.jurnal.Models;
 
 public class User {
     private final int id;

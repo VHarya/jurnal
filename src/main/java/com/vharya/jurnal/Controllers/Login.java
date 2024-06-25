@@ -1,10 +1,12 @@
-package com.vharya.jurnal;
+package com.vharya.jurnal.Controllers;
 
+import com.vharya.jurnal.DatabaseManager;
+import com.vharya.jurnal.Models.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-public class LoginController {
+public class Login {
     @FXML
     private TextField usernameTextField;
     @FXML
@@ -20,7 +22,6 @@ public class LoginController {
         try {
             DatabaseManager db = new DatabaseManager();
             User user = db.login(username, password);
-            System.out.println(user.getId());
         } catch (Exception e) {
             errorMessage.setText(e.getMessage());
             errorMessage.setVisible(true);

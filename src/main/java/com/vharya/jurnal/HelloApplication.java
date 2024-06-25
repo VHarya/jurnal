@@ -11,9 +11,6 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
-    private final static int SCREEN_HEIGHT = 720;
-    private final static int SCREEN_WIDTH = 1280;
-
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
