@@ -1,10 +1,18 @@
 package com.vharya.jurnal.Controllers;
 
-import com.vharya.jurnal.DatabaseManager;
-import com.vharya.jurnal.Models.User;
+import com.vharya.jurnal.App;
+import com.vharya.jurnal.DBConfig;
+import com.vharya.jurnal.GlobalSingleton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Login {
     @FXML
@@ -20,11 +28,22 @@ public class Login {
         String password = passwordTextField.getText();
 
         try {
-            DatabaseManager db = new DatabaseManager();
-            User user = db.login(username, password);
-        } catch (Exception e) {
+            Integer id = DBConfig.login(username, password);
+            if (id != null) {
+                GlobalSingleton globalSingleton = GlobalSingleton.getInstance();
+                globalSingleton.setUserId(id);
+
+                App.changeRoot("home");
+            }
+            else {
+                errorMessage.setText("Username atau Password salah!");
+            }
+        } catch (SQLException e) {
             errorMessage.setText(e.getMessage());
             errorMessage.setVisible(true);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR!", JOptionPane.ERROR_MESSAGE);
+            throw new RuntimeException(e);
         }
     }
 }

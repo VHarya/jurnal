@@ -9,12 +9,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vharya.jurnal.Controllers.Login">
+<BorderPane prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vharya.jurnal.Controllers.Login">
    <top>
       <Label text="Sign into your account!" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <font>
-            <Font name="System Bold" size="24.0" />
+            <Font name="Liberation Sans Bold" size="24.0" />
          </font>
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -24,32 +23,32 @@
    <center>
       <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
-            <Insets/>
+            <Insets />
          </BorderPane.margin>
          <padding>
-            <Insets left="40.0" right="40.0"/>
+            <Insets left="40.0" right="40.0" />
          </padding>
          <Label text="Username">
             <font>
-               <Font size="18.0"/>
+               <Font size="14.0" />
             </font>
             <VBox.margin>
-               <Insets bottom="5.0" top="10.0"/>
+               <Insets bottom="5.0" top="10.0" />
             </VBox.margin>
          </Label>
-         <TextField fx:id="usernameTextField"/>
+         <TextField fx:id="usernameTextField" />
          <Label text="Password">
             <VBox.margin>
-               <Insets bottom="5.0" top="10.0"/>
+               <Insets bottom="5.0" top="10.0" />
             </VBox.margin>
             <font>
-               <Font size="18.0"/>
+               <Font size="14.0" />
             </font>
          </Label>
-         <PasswordField fx:id="passwordTextField"/>
+         <PasswordField fx:id="passwordTextField" />
          <Label fx:id="errorMessage" text="Error Message" textAlignment="RIGHT" textFill="RED" visible="false">
             <VBox.margin>
-               <Insets top="10.0"/>
+               <Insets top="10.0" />
             </VBox.margin>
          </Label>
       </VBox>
