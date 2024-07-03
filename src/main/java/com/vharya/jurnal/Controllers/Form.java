@@ -3,24 +3,35 @@ package com.vharya.jurnal.Controllers;
 import com.vharya.jurnal.App;
 import com.vharya.jurnal.DBConfig;
 import com.vharya.jurnal.GlobalSingleton;
+import com.vharya.jurnal.Models.JurnalEntry;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import javax.swing.*;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class Form {
+public class Form implements Initializable {
     @FXML
     TextField inputID;
     @FXML
     TextField inputDate;
     @FXML
     TextArea inputContent;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        JurnalEntry entry = GlobalSingleton.getInstance().getJurnalEntry();
+
+        if (entry != null) {
+            inputID.setText(Integer.toString(entry.getId()));
+            inputDate.setText(entry.getCreatedDate());
+            inputContent.setText(entry.getContent());
+        }
+    }
 
     @FXML
     private void onButtonSubmitPressed() {
@@ -33,21 +44,21 @@ public class Form {
     }
 
     @FXML
-    private void onButtonBackPressed() throws IOException {
+    private void onButtonBackPressed() {
+        GlobalSingleton.getInstance().setJurnalEntry(null);
         App.changeRoot("home");
     }
 
     private void insertData() {
         try {
-            String sql = "INSERT INTO jurnals VALUES (null, ?, null, null, ?)";
+            String content = inputContent.getText();
+            int userId = GlobalSingleton.getInstance().getUserId();
 
-            Connection connection = DBConfig.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
+            DBConfig.insertJurnal(content, userId);
 
-            statement.setString(1, inputContent.getText());
-            statement.setInt(2, GlobalSingleton.getInstance().getUserId());
+            GlobalSingleton.getInstance().setJurnalEntry(null);
+            App.changeRoot("home");
 
-            statement.execute();
             JOptionPane.showMessageDialog(null, "Berhasil Menambahkan Jurnal!");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -56,15 +67,15 @@ public class Form {
 
     private void updateData() {
         try {
-            String sql = "UPDATE jurnals SET content=? WHERE id=?";
+            String content = inputContent.getText();
+            int jurnalID = Integer.parseInt(inputID.getText());
+            int userID = GlobalSingleton.getInstance().getUserId();
 
-            Connection connection = DBConfig.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
+            DBConfig.updateJurnal(content, jurnalID, userID);
 
-            statement.setString(1, inputContent.getText());
-            statement.setInt(2, GlobalSingleton.getInstance().getUserId());
+            GlobalSingleton.getInstance().setJurnalEntry(null);
+            App.changeRoot("home");
 
-            statement.execute();
             JOptionPane.showMessageDialog(null, "Berhasil Mengubah Jurnal!");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());

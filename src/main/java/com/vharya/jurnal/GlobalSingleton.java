@@ -1,9 +1,12 @@
 package com.vharya.jurnal;
 
+import com.vharya.jurnal.Models.JurnalEntry;
+
 public class GlobalSingleton {
     private final static GlobalSingleton instance = new GlobalSingleton();
 
     private int loggedInUserId;
+    private JurnalEntry selectedEntry;
 
     private GlobalSingleton() {}
 
@@ -17,5 +20,13 @@ public class GlobalSingleton {
 
     public void setUserId(int userId) {
         this.loggedInUserId = userId;
+    }
+
+    public JurnalEntry getJurnalEntry() {
+        return selectedEntry;
+    }
+
+    public void setJurnalEntry(JurnalEntry entry) {
+        this.selectedEntry = entry;
     }
 }

@@ -2,7 +2,12 @@ package com.vharya.jurnal;
 
 import com.vharya.jurnal.Models.JurnalEntry;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+
 import java.util.ArrayList;
 
 public class DBConfig {
@@ -50,5 +55,42 @@ public class DBConfig {
         }
 
         return jurnals;
+    }
+
+    public static void insertJurnal(String content, int userID) throws SQLException {
+        String sql = "INSERT INTO jurnals VALUES (null, ?, null, null, ?)";
+
+        Connection connection = DBConfig.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        statement.setString(1, content);
+        statement.setInt(2, userID);
+
+        statement.execute();
+    }
+
+    public static void updateJurnal(String content, int id, int userID) throws SQLException {
+        String sql = "UPDATE jurnals SET content=? WHERE id=? AND user_id=?";
+
+        Connection connection = DBConfig.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        statement.setString(1, content);
+        statement.setInt(2, id);
+        statement.setInt(3, userID);
+
+        statement.execute();
+    }
+
+    public static void deleteJurnal(int id, int userID) throws SQLException {
+        String sql = "DELETE FROM jurnal WHERE id=? AND user_id=?";
+
+        Connection connection = DBConfig.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        statement.setInt(1, id);
+        statement.setInt(2, userID);
+
+        statement.execute();
     }
 }

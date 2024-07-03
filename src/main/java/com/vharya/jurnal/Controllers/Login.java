@@ -4,23 +4,28 @@ import com.vharya.jurnal.App;
 import com.vharya.jurnal.DBConfig;
 import com.vharya.jurnal.GlobalSingleton;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class Login {
+public class Login implements Initializable {
     @FXML
     private TextField usernameTextField;
     @FXML
     private TextField passwordTextField;
     @FXML
     private Label errorMessage;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //
+    }
 
     @FXML
     public void onSubmitButtonClicked() {
@@ -41,9 +46,6 @@ public class Login {
         } catch (SQLException e) {
             errorMessage.setText(e.getMessage());
             errorMessage.setVisible(true);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR!", JOptionPane.ERROR_MESSAGE);
-            throw new RuntimeException(e);
         }
     }
 }

@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
 
 public class App extends Application {
@@ -13,7 +14,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("login"), 720, 480);
+        scene = new Scene(loadFXML("login"));
 
         stage.setTitle("Jurnal");
         stage.setScene(scene);
@@ -30,8 +31,12 @@ public class App extends Application {
         return loader.load();
     }
 
-    public static void changeRoot(String root) throws IOException {
-        scene.setRoot(loadFXML(root));
+    public static void changeRoot(String root) {
+        try {
+            scene.setRoot(loadFXML(root));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Failed to open page!\n" + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {
