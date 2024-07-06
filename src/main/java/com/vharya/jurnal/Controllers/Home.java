@@ -4,20 +4,15 @@ import com.vharya.jurnal.App;
 import com.vharya.jurnal.DBConfig;
 import com.vharya.jurnal.GlobalSingleton;
 import com.vharya.jurnal.Models.JurnalEntry;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -34,11 +29,8 @@ public class Home implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadTable();
-        GlobalSingleton.getInstance().setJurnalEntry(null);
-
-        buttonDetail.setDisable(true);
-        buttonEdit.setDisable(true);
-        buttonDelete.setDisable(true);
+        GlobalSingleton.getInstance().setSelectedJurnalEntry(null);
+        setButtonsEnabled(false);
     }
 
     private void loadTable() {
@@ -63,28 +55,38 @@ public class Home implements Initializable {
         }
     }
 
+    private void setButtonsEnabled(boolean val) {
+        buttonDetail.setDisable(!val);
+        buttonEdit.setDisable(!val);
+        buttonDelete.setDisable(!val);
+    }
+
     @FXML
     private void onListItemPressed() {
-        JurnalEntry entry = listviewJurnal.getSelectionModel().getSelectedItem();
-        GlobalSingleton.getInstance().setJurnalEntry(entry);
-
-        buttonDetail.setDisable(false);
-        buttonEdit.setDisable(false);
-        buttonDelete.setDisable(false);
+        setButtonsEnabled(true);
     }
 
     @FXML
     private void onButtonDetailPressed() {
+        JurnalEntry entry = listviewJurnal.getSelectionModel().getSelectedItem();
+        GlobalSingleton.getInstance().setSelectedJurnalEntry(entry);
+
         App.changeRoot("detail");
     }
 
     @FXML
     private void onButtonCreatePressed() {
+        GlobalSingleton globalSingleton = GlobalSingleton.getInstance();
+        globalSingleton.setSelectedJurnalEntry(null);
+
         App.changeRoot("form");
     }
 
     @FXML
     private void onButtonEditPressed() {
+        JurnalEntry entry = listviewJurnal.getSelectionModel().getSelectedItem();
+        GlobalSingleton.getInstance().setSelectedJurnalEntry(entry);
+
         App.changeRoot("form");
     }
 
@@ -110,6 +112,7 @@ public class Home implements Initializable {
 
     @FXML
     private void onButtonLogoutPressed() {
+        GlobalSingleton.getInstance().clearData();
         App.changeRoot("login");
     }
 }

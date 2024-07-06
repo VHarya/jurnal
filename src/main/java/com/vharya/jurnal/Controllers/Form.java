@@ -45,7 +45,7 @@ public class Form implements Initializable {
 
     @FXML
     private void onButtonBackPressed() {
-        GlobalSingleton.getInstance().setJurnalEntry(null);
+        GlobalSingleton.getInstance().setSelectedJurnalEntry(null);
         App.changeRoot("home");
     }
 
@@ -56,7 +56,7 @@ public class Form implements Initializable {
 
             DBConfig.insertJurnal(content, userId);
 
-            GlobalSingleton.getInstance().setJurnalEntry(null);
+            GlobalSingleton.getInstance().setSelectedJurnalEntry(null);
             App.changeRoot("home");
 
             JOptionPane.showMessageDialog(null, "Berhasil Menambahkan Jurnal!");
@@ -73,7 +73,7 @@ public class Form implements Initializable {
 
             DBConfig.updateJurnal(content, jurnalID, userID);
 
-            GlobalSingleton.getInstance().setJurnalEntry(null);
+            GlobalSingleton.getInstance().setSelectedJurnalEntry(null);
             App.changeRoot("home");
 
             JOptionPane.showMessageDialog(null, "Berhasil Mengubah Jurnal!");
