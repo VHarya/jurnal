@@ -6,18 +6,16 @@ import java.util.Date;
 public class JurnalEntry {
     private int id;
     private String content;
-    private Date createdDate;
-    private Date updateDate;
+    private String createdDate;
 
     public JurnalEntry() {
         //
     }
 
-    public JurnalEntry(int id, String content, Date createdDate, Date updateDate) {
+    public JurnalEntry(int id, String content, String createdDate) {
         this.id = id;
         this.content = content;
         this.createdDate = createdDate;
-        this.updateDate = updateDate;
     }
 
     public int getId() {
@@ -29,12 +27,6 @@ public class JurnalEntry {
     }
 
     public String getCreatedDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd/MMM/yyyy HH:mm");
-        return dateFormat.format(createdDate);
-    }
-
-    public String getUpdateDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd/MMM/yyyy HH:mm");
-        return dateFormat.format(updateDate);
+        return createdDate;
     }
 }

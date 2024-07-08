@@ -3,6 +3,7 @@ module com.vharya.jurnal {
     requires javafx.fxml;
     requires java.sql;
     requires java.desktop;
+    requires org.slf4j;
 
 
     opens com.vharya.jurnal to javafx.fxml;

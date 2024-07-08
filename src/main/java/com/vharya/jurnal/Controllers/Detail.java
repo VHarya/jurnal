@@ -18,7 +18,7 @@ public class Detail implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        JurnalEntry entry = GlobalSingleton.getInstance().getJurnalEntry();
+        JurnalEntry entry = GlobalSingleton.getInstance().getSelectedJurnalEntry();
         labelDatetime.setText(entry.getCreatedDate());
         labelContent.setText(entry.getContent());
     }

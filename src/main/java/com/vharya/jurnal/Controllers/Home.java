@@ -4,40 +4,92 @@ import com.vharya.jurnal.App;
 import com.vharya.jurnal.DBConfig;
 import com.vharya.jurnal.GlobalSingleton;
 import com.vharya.jurnal.Models.JurnalEntry;
+import com.vharya.jurnal.Models.User;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Home implements Initializable {
+    private final GlobalSingleton singleton = GlobalSingleton.getInstance();
+
     @FXML
-    private Button buttonDetail;
+    private ImageView imageProfile;
     @FXML
-    private Button buttonEdit;
+    private Label labelUsername;
     @FXML
-    private Button buttonDelete;
+    private Label labelDate;
+    @FXML
+    private Label labelContent;
     @FXML
     private ListView<JurnalEntry> listviewJurnal;
+    @FXML
+    private ScrollPane containerContent;
+    @FXML
+    private VBox containerEmpty;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        initUser();
         loadTable();
-        GlobalSingleton.getInstance().setSelectedJurnalEntry(null);
-        setButtonsEnabled(false);
+
+        if (listviewJurnal.getItems().isEmpty()) {
+            isListViewEmpty(true);
+        } else {
+            isListViewEmpty(false);
+        }
+    }
+
+    private void initUser() {
+        User user;
+        try {
+            user = DBConfig.getUserData(singleton.getUserId());
+
+            labelUsername.setText(user.getName());
+
+            if (user.getFilepath() == null) return;
+            if (user.getFilepath().isEmpty()) return;
+
+            InputStream inputStream = new FileInputStream(user.getFilepath());
+            Image image = new Image(inputStream);
+            imageProfile.setImage(image);
+        }
+        catch (SQLException e) {
+            App.changeRoot("user_list");
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    e.getMessage(),
+                    "Terjadi Kesalahan saat mengambil data user!",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+            throw new RuntimeException(e);
+        }
+        catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void loadTable() {
         try {
-            GlobalSingleton globalSingleton = GlobalSingleton.getInstance();
-            ArrayList<JurnalEntry> jurnals = DBConfig.getAllJurnals(globalSingleton.getUserId());
+            ArrayList<JurnalEntry> jurnals = DBConfig.getAllJurnals(singleton.getUserId());
 
+            listviewJurnal.getItems().clear();
             listviewJurnal.getItems().addAll(jurnals);
             listviewJurnal.setCellFactory(jurnalEntryListView -> new ListCell<JurnalEntry>() {
                 @Override
@@ -50,60 +102,74 @@ public class Home implements Initializable {
                     }
                 }
             });
+
+            listviewJurnal.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<JurnalEntry>() {
+                @Override
+                public void changed(ObservableValue<? extends JurnalEntry> observableValue, JurnalEntry oldEntry, JurnalEntry newEntry) {
+                    singleton.setSelectedJurnalEntry(newEntry);
+                    loadContent(newEntry);
+                }
+            });
+
+            if (singleton.getSelectedJurnalEntry() == null) {
+                listviewJurnal.getSelectionModel().selectFirst();
+            }
+            else {
+                listviewJurnal.getSelectionModel().select(singleton.getSelectedJurnalEntry());
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Tidak bisa menampilkan daftar jurnal karena\n" + e.getMessage());
         }
     }
 
-    private void setButtonsEnabled(boolean val) {
-        buttonDetail.setDisable(!val);
-        buttonEdit.setDisable(!val);
-        buttonDelete.setDisable(!val);
+    private void loadContent(JurnalEntry entry) {
+        labelDate.setText(entry.getCreatedDate());
+        labelContent.setText(entry.getContent());
+    }
+
+    private void isListViewEmpty(boolean isEmpty) {
+        containerEmpty.setVisible(isEmpty);
+        containerContent.setVisible(!isEmpty);
     }
 
     @FXML
     private void onListItemPressed() {
-        setButtonsEnabled(true);
-    }
-
-    @FXML
-    private void onButtonDetailPressed() {
-        JurnalEntry entry = listviewJurnal.getSelectionModel().getSelectedItem();
-        GlobalSingleton.getInstance().setSelectedJurnalEntry(entry);
-
-        App.changeRoot("detail");
+        listviewJurnal.getSelectionModel().getSelectedItem();
     }
 
     @FXML
     private void onButtonCreatePressed() {
-        GlobalSingleton globalSingleton = GlobalSingleton.getInstance();
+        GlobalSingleton globalSingleton = singleton;
         globalSingleton.setSelectedJurnalEntry(null);
 
-        App.changeRoot("form");
+        App.changeRoot("form_jurnal_create");
     }
 
     @FXML
     private void onButtonEditPressed() {
-        JurnalEntry entry = listviewJurnal.getSelectionModel().getSelectedItem();
-        GlobalSingleton.getInstance().setSelectedJurnalEntry(entry);
-
-        App.changeRoot("form");
+        App.changeRoot("form_jurnal_edit");
     }
 
     @FXML
     private void onButtonDeletePressed() {
-        JurnalEntry entry = GlobalSingleton.getInstance().getJurnalEntry();
+        JurnalEntry entry = singleton.getSelectedJurnalEntry();
         int confirmDelete = JOptionPane.showConfirmDialog(
                 null,
-                "Apakah and yakin ingin menghapus jurnal " + entry.getCreatedDate() + "?"
+                "Jurnal yang dihapus tidak bisa dikembalikan\n" +
+                        "Lanjutkan menghapus jurnal " + entry.getCreatedDate() + "?",
+                "Apakah anda yakin ingin menghapus jurnal?",
+                JOptionPane.YES_NO_OPTION
         );
 
         if (confirmDelete == JOptionPane.YES_OPTION) {
             try {
                 DBConfig.deleteJurnal(
                         entry.getId(),
-                        GlobalSingleton.getInstance().getUserId()
+                        singleton.getUserId()
                 );
+
+                singleton.setSelectedJurnalEntry(null);
+                loadTable();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
@@ -112,7 +178,7 @@ public class Home implements Initializable {
 
     @FXML
     private void onButtonLogoutPressed() {
-        GlobalSingleton.getInstance().clearData();
-        App.changeRoot("login");
+        singleton.clearData();
+        App.changeRoot("user_list");
     }
 }

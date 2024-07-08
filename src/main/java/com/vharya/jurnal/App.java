@@ -8,16 +8,27 @@ import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
 
 public class App extends Application {
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("login"));
+        try {
+            DBConfig.initDatabase();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
+        scene = new Scene(loadFXML("user_list"));
+
+//        stage.setWidth(720);
+//        stage.setHeight(490);
         stage.setTitle("Jurnal");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
 
 //        stage.setOnCloseRequest(windowEvent -> {
@@ -35,11 +46,21 @@ public class App extends Application {
         try {
             scene.setRoot(loadFXML(root));
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Failed to open page!\n" + e.getMessage());
+//            System.out.println(e);
+//            JOptionPane.showMessageDialog(null, "Failed to open page!\n" + e.getMessage());
+            throw new RuntimeException(e);
         }
+    }
+
+    public static InputStream getResourceAsStream(String path) {
+        return App.class.getResourceAsStream(path);
     }
 
     public static void main(String[] args) {
         launch();
     }
 }
+
+
+// Possible breakage when Application is moved
+// Mayhaps... because the way profile image is stored :P

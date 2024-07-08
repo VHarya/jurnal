@@ -1,12 +1,26 @@
 package com.vharya.jurnal.Models;
 
 public class User {
-    private final int id;
-    private final String name;
+    private int id = -1;
+    private String name = "";
+    private String imageFilepath = "";
+    private boolean isProtected = false;
 
-    public User(int id, String name) {
+    public User() {
+        //
+    }
+
+    public User(int id, String name, String imageFilepath) {
         this.id = id;
         this.name = name;
+        this.imageFilepath = imageFilepath;
+    }
+
+    public User(int id, String name, String imageFilepath, boolean isProtected) {
+        this.id = id;
+        this.name = name;
+        this.imageFilepath = imageFilepath;
+        this.isProtected = isProtected;
     }
 
     public int getId() {
@@ -15,5 +29,13 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getFilepath() {
+        return imageFilepath;
+    }
+
+    public boolean isProtected() {
+        return isProtected;
     }
 }

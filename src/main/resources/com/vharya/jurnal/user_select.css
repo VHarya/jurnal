@@ -1,0 +1,12 @@
+.userCard {
+    -fx-background-color: #EFEFEF;
+    -fx-background-radius: 10;
+}
+
+.userCardSelected {
+    -fx-border-color: #000000; -fx-border-radius: 10; -fx-border-width: 2;
+}
+
+.imageContainer {
+    -fx-background-color: #000000;
+}

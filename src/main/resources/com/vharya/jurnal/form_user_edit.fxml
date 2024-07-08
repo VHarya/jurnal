@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vharya.jurnal.Controllers.FormUserEdit">
+    <top>
+        <Label text="Kelola Pengguna" BorderPane.alignment="TOP_LEFT">
+            <BorderPane.margin>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </BorderPane.margin>
+            <font>
+                <Font size="32.0" />
+            </font>
+        </Label>
+    </top>
+    <bottom>
+        <HBox alignment="CENTER" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onButtonCancelPressed" text="Batal" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+            <Button layoutX="30.0" layoutY="30.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onButtonChangePressed" text="Ubah Kata Sandi" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onButtonSubmitPressed" text="Selesai" wrapText="true" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </HBox>
+    </bottom>
+    <center>
+        <HBox alignment="CENTER" prefHeight="290.0" prefWidth="580.0" spacing="20.0" BorderPane.alignment="CENTER">
+            <children>
+                <ImageView fx:id="imageProfile" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                    <HBox.margin>
+                        <Insets />
+                    </HBox.margin>
+                </ImageView>
+                <VBox alignment="CENTER" prefHeight="275.0" prefWidth="410.0" spacing="10.0">
+                    <children>
+                        <TextField fx:id="inputUsername" promptText="Nama User">
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                            </padding>
+                        </TextField>
+                  <VBox prefWidth="100.0" />
+                        <HBox spacing="10.0">
+                            <children>
+                                <TextField fx:id="inputImage" disable="true" editable="false" opacity="0.65" promptText="Gambar Profil (opsional)" HBox.hgrow="ALWAYS">
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </TextField>
+                                <Button fx:id="buttonSelectFile" mnemonicParsing="false" onAction="#onButtonSelectFilePressed" prefHeight="38.0" prefWidth="38.0">
+                                    <padding>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </padding>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </center>
+</BorderPane>
