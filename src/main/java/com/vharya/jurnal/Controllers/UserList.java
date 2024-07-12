@@ -12,10 +12,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
@@ -71,6 +73,8 @@ public class UserList implements Initializable {
         ImageView imageView = new ImageView();
         Label label = new Label();
 
+        // Set image if available
+        // else just use default
         if (user.getFilepath() != null) {
             try {
                 InputStream inputStream = new FileInputStream(user.getFilepath());
@@ -84,16 +88,17 @@ public class UserList implements Initializable {
             imageView.setImage(new Image(App.getResourceAsStream("assets/images/avatar_square.png")));
         }
 
-        imageView.setFitWidth(150);
-        imageView.setFitHeight(150);
+        label.setText(user.getName());
+        label.setFont(new Font(16));
 
         imageContainer.setPrefWidth(150);
         imageContainer.setPrefHeight(150);
         imageContainer.getChildren().add(imageView);
 
-        label.setText(user.getName());
-        label.setFont(new Font(18));
+        imageView.setFitWidth(150);
+        imageView.setFitHeight(150);
 
+        card.setPrefWidth(100);
         card.setPadding(new Insets(20));
         card.setSpacing(20);
         card.setAlignment(Pos.CENTER);

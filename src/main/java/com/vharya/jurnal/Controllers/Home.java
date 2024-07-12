@@ -15,7 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import javax.swing.*;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -44,7 +43,7 @@ public class Home implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initUser();
+        initUserProfile();
         loadTable();
 
         if (listviewJurnal.getItems().isEmpty()) {
@@ -54,7 +53,7 @@ public class Home implements Initializable {
         }
     }
 
-    private void initUser() {
+    private void initUserProfile() {
         User user;
         try {
             user = DBConfig.getUserData(singleton.getUserId());
@@ -111,12 +110,21 @@ public class Home implements Initializable {
                 }
             });
 
-            if (singleton.getSelectedJurnalEntry() == null) {
-                listviewJurnal.getSelectionModel().selectFirst();
+            // If selected entry stored isn't null
+            // then select the stored entry
+            JurnalEntry selectedJurnalEntry = singleton.getSelectedJurnalEntry();
+            if (selectedJurnalEntry != null) {
+                for (JurnalEntry jurnalEntry : listviewJurnal.getItems()) {
+                    if (jurnalEntry.getId() != selectedJurnalEntry.getId()) continue;
+
+                    listviewJurnal.getSelectionModel().select(jurnalEntry);
+                    loadContent(jurnalEntry);
+                    break;
+                }
+                return;
             }
-            else {
-                listviewJurnal.getSelectionModel().select(singleton.getSelectedJurnalEntry());
-            }
+
+            listviewJurnal.getSelectionModel().selectFirst(); // else select first
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Tidak bisa menampilkan daftar jurnal karena\n" + e.getMessage());
         }

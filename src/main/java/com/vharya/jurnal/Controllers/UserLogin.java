@@ -39,17 +39,22 @@ public class UserLogin implements Initializable {
     }
 
     private void initProfileImage(String filepath) {
-        if (filepath == null) return;
-        if (filepath.isEmpty()) return;
-
         try {
             InputStream inputStream = new FileInputStream(filepath);
             imageProfile.setImage(new Image(inputStream));
+
+            // if imageProfile has image
+            // then stop and return
+            // -sun tzu
+            if (imageProfile.getImage() != null) return;
         }
         catch (IOException e) {
             imageProfile.setImage(defaultProfile);
             throw new RuntimeException(e);
         }
+
+        Image image = new Image(App.getResourceAsStream("assets/images/avatar_square.png"));
+        imageProfile.setImage(image);
     }
 
     @FXML
